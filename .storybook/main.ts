@@ -1,26 +1,25 @@
 import type { StorybookConfig } from '@storybook/angular';
 import { StorybookConfigVite } from '@storybook/builder-vite';
-import { UserConfig } from 'vite';
 
 const config: StorybookConfig & StorybookConfigVite= {
-  "stories": [
+  stories: [
     "../src/**/*.mdx",
     "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
-  "addons": [
+  addons: [
     {
-      "name": "@storybook/addon-essentials",
-      "options": {
-        "docs": false
-      }
+      name: '@storybook/addon-essentials',
+      options: {
+        docs: false,
+      },
     },
-    "@storybook/addon-onboarding",
-    "@chromatic-com/storybook",
-    "@storybook/addon-interactions"
+    '@storybook/addon-onboarding',
+    '@chromatic-com/storybook',
+    '@storybook/experimental-addon-test',
   ],
-  "framework": {
-    "name": "@storybook/angular",
-    "options": {}
+  framework: {
+    name: '@storybook/angular',
+    options: {},
   },
   core: {
     builder: {
@@ -29,9 +28,10 @@ const config: StorybookConfig & StorybookConfigVite= {
         viteConfigPath: undefined,
       },
     },
+    disableTelemetry: true,
   },
-  async viteFinal(config: UserConfig) {
-    // Merge custom configuration into the default config
+  async viteFinal(config) {
+    // Use dynamic import for ESM-only packages
     const { mergeConfig } = await import('vite');
     const { default: angular } = await import('@analogjs/vite-plugin-angular');
 
